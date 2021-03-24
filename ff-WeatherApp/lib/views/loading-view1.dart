@@ -1,6 +1,9 @@
 //Geolocator package from pub.dev
 //https://pub.dev/packages/geolocator
 
+//flutter_spinkit from pub.dev
+//https://pub.dev/packages/flutter_spinkit
+
 //In android/app/src/main/AndroidManifest.xml
 //we must copy the following directly under the
 //<manifest> tag
@@ -14,42 +17,36 @@
 //<string>This app needs access to location when in the background.</string>
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:robbinlaw/services/weather.dart';
-import 'package:robbinlaw/views/location-view.dart';
+import 'package:robbinlaw/services/location.dart';
 
-class LoadingScreen1 extends StatefulWidget {
+class LoadingView1 extends StatefulWidget {
   @override
-  _LoadingScreen1State createState() => _LoadingScreen1State();
+  _LoadingView1State createState() => _LoadingView1State();
 }
 
-class _LoadingScreen1State extends State<LoadingScreen1> {
-  void getLocation() async {
-    try {
-      Position position = await Geolocator()
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
-      print(position);
-    } catch (e) {
-      print(e);
-    }
-  }
+class _LoadingView1State extends State<LoadingView1> {
+  LocationService locationService = LocationService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        RaisedButton(
-          onPressed: () {
-            getLocation();
-          },
-          child: Text('Get Location'),
-        ),
-        SpinKitDoubleBounce(
-          color: Colors.white,
-          size: 100,
-        ),
-      ]),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              await locationService.getCurrentLocation();
+            },
+            child: Text('Get Location'),
+          ),
+          SpinKitDoubleBounce(
+            color: Colors.white,
+            size: 100,
+          ),
+        ],
+      ),
     );
   }
 }
